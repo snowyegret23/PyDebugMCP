@@ -5,6 +5,10 @@
   "version": "1.0.0",
   "private": true,
   "publisher": "snowyegret",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowyegret23/PyDebugMCP.git"
+  },
   "license": "MIT",
   "files": [
     "dist/extension/**",
