@@ -1,0 +1,15 @@
+dist
+node_modules
+.venv/
+*.vsix
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+build/
+python-dist/
+pyinstaller-build/
+pyinstaller-dist/
+pyinstaller-spec/
+build_entry.py

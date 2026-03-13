@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydebug-mcp"
+version = "1.0.0"
+description = "Standalone Python MCP server for PyDebugBridge."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp>=1.26.0",
+]
+
+[project.optional-dependencies]
+build = [
+  "build>=1.2.0",
+]
+
+[project.scripts]
+pydebug-mcp = "PyDebugMCP.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["PyDebugMCP*"]

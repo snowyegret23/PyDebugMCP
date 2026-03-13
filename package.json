@@ -1,0 +1,157 @@
+{
+  "name": "pydebug-bridge",
+  "displayName": "PyDebugBridge",
+  "description": "Expose live Python debug snapshots from VS Code to AI clients through PyDebugMCP.",
+  "version": "1.0.0",
+  "private": true,
+  "publisher": "snowyegret",
+  "license": "MIT",
+  "files": [
+    "dist/extension/**",
+    "dist/shared/**",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "vscode": "^1.110.0",
+    "node": ">=20.0.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:pyDebugBridge.copyConnectionInfo",
+    "onCommand:pyDebugBridge.refreshActiveSnapshot",
+    "onCommand:pyDebugBridge.copyCurrentDebugInfo"
+  ],
+  "main": "./dist/extension/index.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "pyDebugBridge.copyConnectionInfo",
+        "title": "Copy Bridge Connection Info",
+        "category": "PyDebugBridge",
+        "icon": "$(link)"
+      },
+      {
+        "command": "pyDebugBridge.refreshActiveSnapshot",
+        "title": "Refresh Active Snapshot",
+        "category": "PyDebugBridge",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "pyDebugBridge.copyCurrentDebugInfo",
+        "title": "현재 모든 디버그 정보 복사",
+        "category": "PyDebugBridge",
+        "icon": "$(copy)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "pyDebugBridge.copyCurrentDebugInfo",
+          "when": "view == workbench.debug.variablesView && debugState == 'stopped' && (debugType == 'python' || debugType == 'debugpy')",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "pyDebugBridge.copyCurrentDebugInfo",
+          "when": "inDebugMode"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PyDebugBridge",
+      "properties": {
+        "pyDebugBridge.port": {
+          "type": "number",
+          "default": 17001,
+          "minimum": 1024,
+          "maximum": 65535,
+          "description": "Localhost port used by the debug bridge."
+        },
+        "pyDebugBridge.maxStackFrames": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum stack frames captured per thread when building a snapshot."
+        },
+        "pyDebugBridge.maxVariableDepth": {
+          "type": "number",
+          "default": 2,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Maximum recursive variable expansion depth."
+        },
+        "pyDebugBridge.maxVariablesPerScope": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Maximum variables fetched for each scope or child collection."
+        },
+        "pyDebugBridge.captureConsole": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to retain debug adapter output events for MCP access."
+        },
+        "pyDebugBridge.hideTelemetryConsoleOutput": {
+          "type": "boolean",
+          "default": true,
+          "description": "Hide debug adapter telemetry output from copied payloads and MCP console responses."
+        },
+        "pyDebugBridge.prioritizePythonScopes": {
+          "type": "boolean",
+          "default": true,
+          "description": "When the active debugger is Python/debugpy, put Locals and Globals first in captured scope order."
+        },
+        "pyDebugBridge.hidePythonInternals": {
+          "type": "boolean",
+          "default": true,
+          "description": "Hide debugpy internal groups and top-level Python dunder globals from captured snapshots."
+        },
+        "pyDebugBridge.copyCommandMaxStackFrames": {
+          "type": "number",
+          "default": 8,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Stack frame limit used by the copy-all-debug-info command."
+        },
+        "pyDebugBridge.copyCommandMaxVariableDepth": {
+          "type": "number",
+          "default": 3,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Variable expansion depth used by the copy-all-debug-info command."
+        },
+        "pyDebugBridge.copyCommandMaxVariablesPerScope": {
+          "type": "number",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Variable limit per scope used by the copy-all-debug-info command."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p .",
+    "watch": "tsc -w -p .",
+    "start:mcp": "python -m PyDebugMCP --transport streamable-http --port 17000",
+    "start:mcp:stdio": "python -m PyDebugMCP --transport stdio",
+    "vscode:prepublish": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/vscode": "^1.110.0",
+    "typescript": "^5.9.3"
+  }
+}
