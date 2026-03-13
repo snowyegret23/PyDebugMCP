@@ -59,8 +59,8 @@ jobs:
         shell: pwsh
         run: |
           python -m build --outdir python-dist
-          Rename-Item "python-dist\pydebug_mcp-${{ inputs.version }}.tar.gz" "PyDebugMCP-v${{ inputs.version }}.tar.gz"
-          Rename-Item "python-dist\pydebug_mcp-${{ inputs.version }}-py3-none-any.whl" "PyDebugMCP-v${{ inputs.version }}-py3-none-any.whl"
+          Move-Item "python-dist\pydebug_mcp-${{ inputs.version }}.tar.gz" "PyDebugMCP-v${{ inputs.version }}.tar.gz"
+          Move-Item "python-dist\pydebug_mcp-${{ inputs.version }}-py3-none-any.whl" "PyDebugMCP-v${{ inputs.version }}-py3-none-any.whl"
 
       - name: Build PyInstaller exe
         shell: pwsh
